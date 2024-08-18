@@ -23,6 +23,8 @@ public class SecurityConfig {
 				.requestMatchers("/store").permitAll()
 				.requestMatchers("/login").permitAll()
 				.requestMatchers("/edit").permitAll()
+				.requestMatchers("/prueba").permitAll()
+				.requestMatchers("/images/**").permitAll()
 				.requestMatchers("/logout").permitAll()
 				.anyRequest().authenticated()
 				)
