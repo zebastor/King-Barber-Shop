@@ -7,5 +7,7 @@ import com.sebastian.AA1_EV01.productos_models.Servicios;
 
 
 public interface ServiciosRepository extends JpaRepository<Servicios, Integer> {
+	
+	public Servicios findById(int idservicio);
 
 }
