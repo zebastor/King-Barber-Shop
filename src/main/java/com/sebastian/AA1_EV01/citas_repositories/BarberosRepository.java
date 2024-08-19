@@ -16,8 +16,12 @@ public interface BarberosRepository extends JpaRepository<Barberos,Integer> {
 	
 	List<Barberos> findByNombre(String nombre);
 	
-	@Query("SELECT b FROM Barberos b WHERE b.cedula NOT IN (SELECT c.barbero_cedula FROM Citas c WHERE c.fecha = :fecha AND c.horainicio = :horainicio)")
-	List<Barberos> findBarberosDisponibles(@Param("fecha") Date fecha, @Param("horainicio") LocalTime horainicio);
+	@Query("SELECT b FROM Barberos b WHERE b.cedula NOT IN (SELECT c.barbero_cedula FROM Citas c WHERE c.fecha = :fecha AND " +
+		       "(:horainicio < c.horafin AND :horafinal > c.horainicio))")
+		List<Barberos> findBarberosDisponibles(@Param("fecha") Date fecha, 
+		                                       @Param("horainicio") LocalTime horainicio, 
+		                                       @Param("horafinal") LocalTime horafinal);
+
 
 
 }

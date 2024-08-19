@@ -141,15 +141,15 @@ public class HomeController {
 
 	       model.addAttribute("fechaSeleccionada", fecha);
 	       model.addAttribute("horaSeleccionada", hora);
-	       
-	       model.addAttribute("horaSeleccionadaFin", hora.plusMinutes(60));
 
+	       // Calcular la hora de finalización del servicio
+	       LocalTime horaFinal = hora.plusMinutes(servicio.getDuracion());
+	       model.addAttribute("horaSeleccionadaFin", horaFinal);
 
 	       // Obtener los barberos disponibles
-	       LocalTime horaInicioSeleccionada = hora; // Si 'hora' ya es de tipo LocalTime
-	       List<Barberos> barberosDisponibles = barberrepo.findBarberosDisponibles(fecha, hora);
+	       List<Barberos> barberosDisponibles = barberrepo.findBarberosDisponibles(fecha, hora, horaFinal);
 	       model.addAttribute("barberos", barberosDisponibles);
-	       
+
 	       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	       int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
 	       Cliente cliente = repo.findByCedula(cedula);
@@ -158,6 +158,7 @@ public class HomeController {
 
 	       return "clientes/seleccionHora";
 	   }
+
 
 
 
