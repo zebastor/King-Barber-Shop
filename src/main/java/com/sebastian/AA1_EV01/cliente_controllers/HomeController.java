@@ -1,5 +1,9 @@
 package com.sebastian.AA1_EV01.cliente_controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sebastian.AA1_EV01.categoria_models.Categorias;
 import com.sebastian.AA1_EV01.categoria_repositories.CategoriaRepository;
+import com.sebastian.AA1_EV01.citas_models.Barberos;
 import com.sebastian.AA1_EV01.citas_models.Citas;
+import com.sebastian.AA1_EV01.citas_repositories.BarberosRepository;
 import com.sebastian.AA1_EV01.citas_repositories.CitaRepository;
 import com.sebastian.AA1_EV01.cliente_models.Cliente;
 import com.sebastian.AA1_EV01.cliente_repositories.ClientesRepository;
@@ -44,6 +50,9 @@ public class HomeController {
 	
 	@Autowired
 	private CitaRepository citarep;
+	
+	@Autowired
+	private BarberosRepository barberrepo;
 	
 	@GetMapping({"", "/"})
 	public String showClientList(Model model) {
@@ -88,11 +97,7 @@ public class HomeController {
 	   
 	   
 	   @GetMapping("/detalleServicio/{idservicio}")
-	   public String mostrarDetalleServicio(@PathVariable("idservicio") int idservicio,
-			   @RequestParam(value = "fecha", required = false) 
-       @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
-			   
-			   Model model) {
+	   public String mostrarDetalleServicio(@PathVariable("idservicio") int idservicio,		   Model model) {
 	       // Buscar el servicio por su ID
 	       Servicios servicio = serv.findById(idservicio);
 
@@ -102,13 +107,8 @@ public class HomeController {
 	       
 	       
 	           // Obtener citas por fecha si se ha seleccionado una
-	           List<Citas> citas;
-	           if (fecha != null) {
-	               citas = citarep.findByFecha(fecha);
-	           } else {
-	               citas = citarep.findAll();
-	           }
-	           model.addAttribute("citas", citas);
+	           List<Citas> citas = citarep.findAll();
+	   	    model.addAttribute("citas", citas);
 	        
 	           
 	       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -123,20 +123,49 @@ public class HomeController {
 		    
 
 	       // Retornar la vista que mostrará los detalles del servicio
-	       return "detalleServicio";
+	       return "clientes/detalleServicio";
 	   } 
 	   
-	   @GetMapping("/filtrarCitasPorFecha")
-	   @ResponseBody
-	   public ResponseEntity<List<Citas>> filtrarCitasPorFecha(
-	       @RequestParam("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<Date> fechaOpt) {
+	   
+	   
+	   
+	   
+	   @GetMapping("/seleccionHora/{idservicio}")
+	   public String seleccionHora(@PathVariable("idservicio") int idservicio,
+	                               @RequestParam("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha, 
+	                               @RequestParam("hora") LocalTime hora,
+	                               Model model) {
+	       // Buscar el servicio por su ID
+	       Servicios servicio = serv.findById(idservicio);
+	       model.addAttribute("servicio", servicio);
 
-	       if (!fechaOpt.isPresent()) {
-	           return ResponseEntity.badRequest().body(Collections.emptyList());
-	       }
+	       model.addAttribute("fechaSeleccionada", fecha);
+	       model.addAttribute("horaSeleccionada", hora);
+	       
+	       model.addAttribute("horaSeleccionadaFin", hora.plusMinutes(60));
 
-	       Date fecha = fechaOpt.get();
-	       List<Citas> citas = citarep.findByFecha(fecha);
-	       return ResponseEntity.ok(citas);
+
+	       // Obtener los barberos disponibles
+	       LocalTime horaInicioSeleccionada = hora; // Si 'hora' ya es de tipo LocalTime
+	       List<Barberos> barberosDisponibles = barberrepo.findBarberosDisponibles(fecha, hora);
+	       model.addAttribute("barberos", barberosDisponibles);
+	       
+	       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	       int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
+	       Cliente cliente = repo.findByCedula(cedula);
+	       model.addAttribute("cedula", cliente.getCedula());
+	       model.addAttribute("nombre", cliente.getNombre());
+
+	       return "clientes/seleccionHora";
 	   }
+
+
+
+
+
+
+
+	   
+	   
+	
 }

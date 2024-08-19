@@ -26,9 +26,9 @@ public class SecurityConfig {
 				.requestMatchers("/prueba").permitAll()
 				.requestMatchers("/detalleServicio").permitAll()
 				.requestMatchers("/images/**").permitAll()
-				.requestMatchers("/detalleServicio/**").permitAll()
 				.requestMatchers("/filtrarCitasPorFecha").permitAll()
 				.requestMatchers("/logout").permitAll()
+				.requestMatchers("/seleccionHora").permitAll()
 				.anyRequest().authenticated()
 				)
 		
