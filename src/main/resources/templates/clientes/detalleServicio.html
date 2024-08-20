@@ -77,6 +77,11 @@
 
         function generarMenuHoras() {
             const horaFiltro = document.getElementById('horaFiltro');
+            horaFiltro.innerHTML = ''; // Limpiar las opciones anteriores
+
+            const fechaSeleccionada = document.getElementById('fechaFiltro').value;
+            const hoy = new Date();
+            const fechaActual = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}-${hoy.getDate().toString().padStart(2, '0')}`;
             const ahora = new Date();
             const horaActual = ahora.getHours();
             const minutoActual = ahora.getMinutes();
@@ -85,7 +90,18 @@
 
             for (let h = inicioHora; h <= finHora; h++) {
                 for (let m = 0; m < 60; m += 30) {
-                    if (h > horaActual || (h === horaActual && m > minutoActual)) {
+                    if (fechaSeleccionada === fechaActual) {
+                        // Si es hoy, mostrar solo las horas futuras
+                        if (h > horaActual || (h === horaActual && m > minutoActual)) {
+                            const hora = h.toString().padStart(2, '0');
+                            const minuto = m.toString().padStart(2, '0');
+                            const opcion = document.createElement('option');
+                            opcion.value = `${hora}:${minuto}`;
+                            opcion.textContent = `${hora}:${minuto}`;
+                            horaFiltro.appendChild(opcion);
+                        }
+                    } else {
+                        // Si es una fecha futura, mostrar todas las horas desde el inicio
                         const hora = h.toString().padStart(2, '0');
                         const minuto = m.toString().padStart(2, '0');
                         const opcion = document.createElement('option');
@@ -96,6 +112,9 @@
                 }
             }
         }
+
+        document.getElementById('fechaFiltro').addEventListener('change', generarMenuHoras);
+
 
         function redirigir() {
             const fechaSeleccionada = document.getElementById('fechaFiltro').value;
