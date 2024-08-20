@@ -4,43 +4,84 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Seleccion hora</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
 </head>
 <body>
    <div class="container">
         <h1 th:text="${servicio.titulo}"></h1>
         <p th:text="${servicio.descripcion}"></p>
+        
         <p><strong>Duración:</strong> <span th:text="${servicio.duracion}"></span> minutos</p>
         <p><strong>Precio:</strong> $<span th:text="${servicio.precio}"></span></p>
    </div>
 
- <div class="container mt-4">
-       <h2>Fecha seleccionada</h2>
-       <p><strong>Fecha:</strong> <span th:text="${fechaSeleccionada}"></span></p>
+   <!-- Información seleccionada -->
+   <div class="container mt-4">
+       <h2>Resumen de la cita</h2>
+       <p><strong>Fecha seleccionada:</strong> <span id="fechaSeleccionadaText" th:text="${fechaSeleccionada}"></span></p>
+       <p><strong>Hora seleccionada:</strong> <span th:text="${horaSeleccionada}"></span></p>
+       <p><strong>Hora de finalización:</strong> <span th:text="${horaSeleccionadaFin}"></span></p>
+       <p><strong>Cédula del cliente:</strong> <span th:text="${cedula}"></span></p>
    </div>
 
-   <!-- Listado de horas disponibles -->
+   <!-- Selección de barbero -->
+   <div class="container mt-4">
+        <h2>Barberos disponibles</h2>
+        <select id="barberoSeleccionado" name="barberoSeleccionado" class="form-select" required>
+            <option value="" disabled selected>Selecciona un barbero</option>
+            <option th:each="barbero : ${barberos}" th:value="${barbero.cedula}" th:text="${barbero.nombre}"></option>
+        </select>
+    </div>
    
-    <div class="container mt-4">
-       <h2>Hora seleccionada</h2>
-       <p><strong>Hora:</strong> <span th:text="${horaSeleccionada}"></span></p>
-   </div>
-   
-     <div class="container mt-4">
-       <h2>Hora seleccionada</h2>
-       <p><strong>Hora:</strong> <span th:text="${horaSeleccionadaFin}"></span></p>
-   </div>
-   
-
-    <div class="container mt-4">
-       <h2>Barberos disponibles</h2>
-       <select id="barberoSeleccionado" class="form-select">
-           <option th:each="barbero : ${barberos}" th:value="${barbero.nombre}" th:text="${barbero.nombre}"></option>
+   <!-- Selección de método de pago -->
+   <div class="container mt-4">
+       <h2>Métodos de pago</h2>
+       <select id="metodoPagoSeleccionado" name="metodoPagoSeleccionado" class="form-select">
+           <option th:each="metododepago : ${metodosPago}" th:value="${metododepago.idmetodo}" th:text="${metododepago.idmetodo}"></option>
        </select>
    </div>
-   
 
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   <!-- Botón para confirmar -->
+   <div class="container mt-4">
+       <form action="/seleccionHora" method="POST" onsubmit="setHiddenInputs()">
+			 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="hidden" id="formattedFecha" name="fechaSeleccionada">
+            <input type="hidden" name="horaSeleccionada" th:value="${horaSeleccionada}">
+            <input type="hidden" name="horaSeleccionadaFin" th:value="${horaSeleccionadaFin}">
+            <input type="hidden" name="cedula" th:value="${cedula}">
+            <input type="hidden" name="servicioId" th:value="${servicio.idservicio}">
+            <input type="hidden" name="categoriaId" th:value="${servicio.categoriaservicio.idcategoria}">
+            <input type="hidden" name="estado" value="pendiente">
+            <input type="hidden" id="hiddenBarbero" name="barberoSeleccionado">
+            <input type="hidden" id="hiddenMetodoPago" name="metodoPagoSeleccionado">
+
+            <button type="submit" class="btn btn-primary">Continuar</button>
+       </form>
+   </div>
+
+   <script>
+       function setHiddenInputs() {
+           const fechaSeleccionadaText = document.getElementById('fechaSeleccionadaText').textContent.trim();
+           
+           // Extrayendo la fecha de la cadena en formato "Mon Aug 19 00:00:00 COT 2024"
+           const fechaArray = fechaSeleccionadaText.split(' ');
+           const year = fechaArray[fechaArray.length - 1];
+           const month = ("JanFebMarAprMayJunJulAugSepOctNovDec".indexOf(fechaArray[1]) / 3 + 1).toString().padStart(2, '0');
+           const day = fechaArray[2].padStart(2, '0');
+           
+           const formattedDate = `${year}-${month}-${day}`;
+           
+           document.getElementById('formattedFecha').value = formattedDate;
+           document.getElementById('hiddenBarbero').value = document.getElementById('barberoSeleccionado').value;
+           document.getElementById('hiddenMetodoPago').value = document.getElementById('metodoPagoSeleccionado').value;
+       }
+   </script>
+
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

@@ -21,9 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sebastian.AA1_EV01.citas_models.MetodosPago;
+import com.sebastian.AA1_EV01.MetodoPago_repositories.MetodosPagoRepository;
 import com.sebastian.AA1_EV01.categoria_models.Categorias;
 import com.sebastian.AA1_EV01.categoria_repositories.CategoriaRepository;
 import com.sebastian.AA1_EV01.citas_models.Barberos;
@@ -53,6 +56,9 @@ public class HomeController {
 	
 	@Autowired
 	private BarberosRepository barberrepo;
+	
+	@Autowired
+	private MetodosPagoRepository pagorepo;
 	
 	@GetMapping({"", "/"})
 	public String showClientList(Model model) {
@@ -139,6 +145,9 @@ public class HomeController {
 	       Servicios servicio = serv.findById(idservicio);
 	       model.addAttribute("servicio", servicio);
 
+	       List<MetodosPago> metodosPago = pagorepo.findAll();
+		    model.addAttribute("metodosPago", metodosPago);
+	       
 	       model.addAttribute("fechaSeleccionada", fecha);
 	       model.addAttribute("horaSeleccionada", hora);
 
@@ -160,13 +169,62 @@ public class HomeController {
 	   }
 
 
+	   @PostMapping("/seleccionHora")
+	   public String confirmarCita(
+	          @RequestParam("fechaSeleccionada") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
+	          @RequestParam("horaSeleccionada") LocalTime horaInicio,
+	          @RequestParam("horaSeleccionadaFin") LocalTime horaFin,
+	          @RequestParam("cedula") int cedulaCliente,
+	          @RequestParam("metodoPagoSeleccionado") int idMetodoPago,
+	          @RequestParam("barberoSeleccionado") int cedulaBarbero,
+	          @RequestParam("servicioId") int idServicio,
+	          @RequestParam("categoriaId") int idCategoria,
+	          @RequestParam("estado") String estado,
+	          Model model) {
+			try {
+	       // Aquí puedes agregar la lógica para manejar la autenticación y otros aspectos
+	     
+	       // Crea una nueva instancia de la entidad Citas
+	       Citas nuevaCita = new Citas();
+	       nuevaCita.setFecha(fecha);
+	       nuevaCita.setHorainicio(horaInicio);
+	       nuevaCita.setHorafin(horaFin);
+	       nuevaCita.setCliente_cedula(cedulaCliente);
+	       nuevaCita.setIdMetodopago(idMetodoPago);
+	       nuevaCita.setBarbero_cedula(cedulaBarbero);
+	       nuevaCita.setIdservicio(idServicio);
+	       nuevaCita.setIdcategoria(idCategoria);
+	       nuevaCita.setEstado(estado);
+
+	       // Guardar la cita en la base de datos
+	       citarep.save(nuevaCita);
+	       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	       int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
+	       Cliente cliente = repo.findByCedula(cedula);
+	       model.addAttribute("cedula", cliente.getCedula());
+			}catch(Exception ex){
+				
+				System.out.println("Exception: "+ex.getMessage());
+			}
+	       // Redirigir a una página de confirmación
+	       return "redirect:/confirmarCita";
+	   }
 
 
 
 
 
 
-	   
+	   @GetMapping("/confirmarCita")
+	    public String showConfirm(Model model) {
+		   
+		   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	       int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
+	       Cliente cliente = repo.findByCedula(cedula);
+	       model.addAttribute("cedula", cliente.getCedula());
+	        return "clientes/confirmarCita"; 
+	    }
+	    
 	   
 	
 }

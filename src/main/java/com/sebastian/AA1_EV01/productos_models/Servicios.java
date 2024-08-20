@@ -2,9 +2,14 @@ package com.sebastian.AA1_EV01.productos_models;
 
 
 
+import com.sebastian.AA1_EV01.categoria_models.Categorias;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 @Entity
 @Table(name= "servicio")
@@ -20,6 +25,18 @@ public class Servicios {
 	private String imagen;
 	private int precio;
 	private Integer duracion;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoriaservicio_idcategoria", insertable = false, updatable = false)
+	 private Categorias categoriaservicio;
+	
+	public Categorias getCategoriaservicio() {
+        return categoriaservicio;
+    }
+
+    public void setCategoriaservicio(Categorias categoriaservicio) {
+        this.categoriaservicio = categoriaservicio;
+    }
 	
 	public int getIdservicio() {
 		return idservicio;

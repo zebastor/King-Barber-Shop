@@ -23,12 +23,14 @@ public class SecurityConfig {
 				.requestMatchers("/store").permitAll()
 				.requestMatchers("/login").permitAll()
 				.requestMatchers("/edit").permitAll()
+				.requestMatchers("/confirmarCita").permitAll()
+				.requestMatchers("/seleccionHora").permitAll()
 				.requestMatchers("/prueba").permitAll()
 				.requestMatchers("/detalleServicio").permitAll()
 				.requestMatchers("/images/**").permitAll()
 				.requestMatchers("/filtrarCitasPorFecha").permitAll()
 				.requestMatchers("/logout").permitAll()
-				.requestMatchers("/seleccionHora").permitAll()
+				
 				.anyRequest().authenticated()
 				)
 		

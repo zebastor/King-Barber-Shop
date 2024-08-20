@@ -8,6 +8,8 @@ import com.sebastian.AA1_EV01.productos_models.Servicios;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import jakarta.persistence.Table;
 @Table(name= "cita")
 public class Citas {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idcita;
 	private Date fecha;
 	private LocalTime horainicio;
