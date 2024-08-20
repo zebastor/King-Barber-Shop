@@ -33,7 +33,6 @@
    <div class="container mt-4">
         <h2>Barberos disponibles</h2>
         <select id="barberoSeleccionado" name="barberoSeleccionado" class="form-select" required>
-            <option value="" disabled selected>Selecciona un barbero</option>
             <option th:each="barbero : ${barberos}" th:value="${barbero.cedula}" th:text="${barbero.nombre}"></option>
         </select>
     </div>
@@ -42,7 +41,7 @@
    <div class="container mt-4">
        <h2>Métodos de pago</h2>
        <select id="metodoPagoSeleccionado" name="metodoPagoSeleccionado" class="form-select">
-           <option th:each="metododepago : ${metodosPago}" th:value="${metododepago.idmetodo}" th:text="${metododepago.idmetodo}"></option>
+           <option th:each="metododepago : ${metodosPago}" th:value="${metododepago.idmetodo}" th:text="${metododepago.nombremetodo}"></option>
        </select>
    </div>
 
