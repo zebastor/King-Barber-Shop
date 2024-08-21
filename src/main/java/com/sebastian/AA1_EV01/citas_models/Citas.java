@@ -3,9 +3,6 @@ package com.sebastian.AA1_EV01.citas_models;
 import java.time.LocalTime;
 import java.util.Date;
 
-
-import com.sebastian.AA1_EV01.productos_models.Servicios;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.sebastian.AA1_EV01.categoria_models;
+package com.sebastian.AA1_EV01.citas_models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

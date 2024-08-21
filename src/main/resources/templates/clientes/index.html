@@ -36,15 +36,17 @@
     <li>
       <a class="navbar-brand text-nowrap d-block d-md-none" href="/" style="font-size: 0.8rem;">King Barber Shop</a>
     </li>
-    <li class="nav-item dropdown">
-      <a class="btn btn-outline-terciary me-2 dropdown-toggle" href="#" id="userDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Categorías
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown2">
-        <li><a class="dropdown-item" href="#">Perfil</a></li>
-        <li><a class="dropdown-item" href="#">Tus citas</a></li>
-      </ul>
+ <li class="nav-item dropdown">
+  <a class="btn btn-outline-terciary me-2 dropdown-toggle" href="#" id="userDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Categorías
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown2">
+    <li th:each="categoriaservicio : ${categorias}">
+      <a class="dropdown-item" href="#" th:text="${categoriaservicio.nombrecategoria}"></a>
     </li>
+  </ul>
+</li>
+
     <li>
       <div class="d-flex align-items-center">
         <div class="dropdown">
@@ -53,7 +55,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><a class="dropdown-item" href="#">Perfil</a></li>
-            <li><a class="dropdown-item" href="#">Tus citas</a></li>
+            <li><a class="dropdown-item" href="/misCitas">Tus citas</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
               <form method="post" action="/logout">
@@ -77,15 +79,17 @@
         <div class="text-end " sec:authorize="!isAuthenticated()"  >
           <ul class="navbar-nav d-flex flex-row">
    <a class="navbar-brand text-nowrap d-block d-md-none" href="/" >King Barber Shop</a></li>
-   <li class="nav-item dropdown">
-    <button class="btn btn-outline-terciary me-2 dropdown-toggle" type="button" id="userDropdown2" data-bs-toggle="dropdown"
-    style="font-size: 1rem;" aria-expanded="false">
-        <span>Categorias</span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown2" th:each="categoriaservicio : ${categorias}">
-        <li><a class="dropdown-item" href="#" th:text="${categoriaservicio.nombrecategoria}"></a></li>
-    </ul>
+  <li class="nav-item dropdown">
+  <a class="btn btn-outline-terciary me-2 dropdown-toggle" href="#" id="userDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Categorías
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown2">
+    <li th:each="categoriaservicio : ${categorias}">
+      <a class="dropdown-item" href="#" th:text="${categoriaservicio.nombrecategoria}"></a>
+    </li>
+  </ul>
 </li>
+
 
 
 
@@ -139,15 +143,20 @@
     <div class="col-md-4" th:each="servicio : ${servicios}">
         <div class="card mb-4">
             <!-- Imagen -->
-            <img th:src="@{'/images/' + ${servicio.imagen}}" class="card-img-top" alt="Imagen del servicio">
-            
+          <a th:href="@{/detalleServicio/{idservicio}(idservicio=${servicio.idservicio})}">
+    <img th:src="@{'/images/' + ${servicio.imagen}}" class="card-img-top" alt="Imagen del servicio">
+</a> 
             <div class="card-body">
                 <!-- Título alineado a la izquierda -->
-                <h5 class="card-title text-start" th:text="${servicio.titulo}"></h5>
-                
+                  <h5 class="card-title text-start">
+        <a th:href="@{/detalleServicio/{idservicio}(idservicio=${servicio.idservicio})}" class="text-decoration-none text-dark" 
+        th:text="${servicio.titulo}"></a>
+    </h5>
                 <!-- Descripción -->
-                <p class="card-text" th:text="${servicio.descripcion}"></p>
-                
+            <p class="card-text">
+        <a th:href="@{/detalleServicio/{idservicio}(idservicio=${servicio.idservicio})}" class="text-decoration-none text-dark"
+        th:text="${servicio.descripcion}"></a>
+    </p>  
                 <!-- Separador -->
                 <hr>
 
@@ -170,16 +179,7 @@
 
     </div>
       
-        <div class="container-fluid" sec:authorize="isAuthenticated()">
-      <div class="row">
-        <div class="col-9">
-          <div class="container">
-            <h1>Cédula: <span th:text="${cedula}"></span></h1>
-            <h1>Nombre: <span th:text="${nombre}"></span></h1>
-          </div>
-        </div>
-      </div>
-    </div>
+  
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/feather-icons"></script>

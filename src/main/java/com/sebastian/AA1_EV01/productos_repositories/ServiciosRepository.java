@@ -2,7 +2,7 @@ package com.sebastian.AA1_EV01.productos_repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sebastian.AA1_EV01.productos_models.Servicios;
+import com.sebastian.AA1_EV01.citas_models.Servicios;
 
 
 

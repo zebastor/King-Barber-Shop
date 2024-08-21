@@ -2,7 +2,10 @@ package com.sebastian.AA1_EV01.cliente_controllers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -26,16 +29,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sebastian.AA1_EV01.citas_models.MetodosPago;
+import com.sebastian.AA1_EV01.citas_models.Servicios;
 import com.sebastian.AA1_EV01.MetodoPago_repositories.MetodosPagoRepository;
-import com.sebastian.AA1_EV01.categoria_models.Categorias;
 import com.sebastian.AA1_EV01.categoria_repositories.CategoriaRepository;
 import com.sebastian.AA1_EV01.citas_models.Barberos;
+import com.sebastian.AA1_EV01.citas_models.Categorias;
 import com.sebastian.AA1_EV01.citas_models.Citas;
 import com.sebastian.AA1_EV01.citas_repositories.BarberosRepository;
 import com.sebastian.AA1_EV01.citas_repositories.CitaRepository;
 import com.sebastian.AA1_EV01.cliente_models.Cliente;
 import com.sebastian.AA1_EV01.cliente_repositories.ClientesRepository;
-import com.sebastian.AA1_EV01.productos_models.Servicios;
 import com.sebastian.AA1_EV01.productos_repositories.ServiciosRepository;
 
 
@@ -90,7 +93,29 @@ public class HomeController {
 
 
 	
+	@GetMapping("/misCitas")
+	public String listCitas(Model model) {
+	    // Obtener la cédula del usuario autenticado
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+	    int cedula = Integer.parseInt(username);
+
+	    // Obtener las citas del cliente usando la cédula del usuario autenticado
+	    List<Citas> misCitas = citarep.findByCedulaCliente(cedula);
+	  
 	
+	    
+	    // Agregar las citas al modelo
+	    model.addAttribute("misCitas", misCitas);
+	    Cliente cliente = repo.findByCedula(cedula);
+	    model.addAttribute("cliente", cliente);
+	   
+
+	    // Retornar la vista
+	    return "clientes/misCitas"; 
+	}
+
+
 
 	
 	   @GetMapping("/login")
@@ -113,19 +138,19 @@ public class HomeController {
 	       
 	       
 	           // Obtener citas por fecha si se ha seleccionado una
-	           List<Citas> citas = citarep.findAll();
-	   	    model.addAttribute("citas", citas);
+	     //      List<Citas> citas = citarep.findAll();
+	   	 //   model.addAttribute("citas", citas);
 	        
 	           
-	       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	   //    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		   
 		        // Si el usuario está autenticado
-		        int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
-		        Cliente cliente = repo.findByCedula(cedula);
+		    //    int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
+		    //    Cliente cliente = repo.findByCedula(cedula);
 
-		        model.addAttribute("cedula", cliente.getCedula());
-		        model.addAttribute("nombre", cliente.getNombre());
+		    //    model.addAttribute("cedula", cliente.getCedula());
+		  //      model.addAttribute("nombre", cliente.getNombre());
 		    
 
 	       // Retornar la vista que mostrará los detalles del servicio

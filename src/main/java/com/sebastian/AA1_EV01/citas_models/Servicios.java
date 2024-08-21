@@ -1,8 +1,6 @@
-package com.sebastian.AA1_EV01.productos_models;
+package com.sebastian.AA1_EV01.citas_models;
 
 
-
-import com.sebastian.AA1_EV01.categoria_models.Categorias;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

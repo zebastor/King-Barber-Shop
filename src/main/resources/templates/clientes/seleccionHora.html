@@ -12,22 +12,29 @@
 	crossorigin="anonymous">
 </head>
 <body>
-   <div class="container">
-        <h1 th:text="${servicio.titulo}"></h1>
-        <p th:text="${servicio.descripcion}"></p>
-        
-        <p><strong>Duración:</strong> <span th:text="${servicio.duracion}"></span> minutos</p>
-        <p><strong>Precio:</strong> $<span th:text="${servicio.precio}"></span></p>
-   </div>
+  
 
    <!-- Información seleccionada -->
-   <div class="container mt-4">
-       <h2>Resumen de la cita</h2>
-       <p><strong>Fecha seleccionada:</strong> <span id="fechaSeleccionadaText" th:text="${fechaSeleccionada}"></span></p>
-       <p><strong>Hora seleccionada:</strong> <span th:text="${horaSeleccionada}"></span></p>
-       <p><strong>Hora de finalización:</strong> <span th:text="${horaSeleccionadaFin}"></span></p>
-       <p><strong>Cédula del cliente:</strong> <span th:text="${cedula}"></span></p>
-   </div>
+ <div class="container mt-5 p-4 border rounded shadow-sm bg-white">
+    <div class="text-center">
+        <h2 class="text-secondary mb-4">Resumen de la Cita</h2>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <strong>Fecha seleccionada:</strong> <span id="fechaSeleccionadaText" th:text="${fechaSeleccionada}"></span>
+        </li>
+        <li class="list-group-item">
+            <strong>Hora seleccionada:</strong> <span th:text="${horaSeleccionada}"></span>
+        </li>
+        <li class="list-group-item">
+            <strong>Hora de finalización:</strong> <span th:text="${horaSeleccionadaFin}"></span>
+        </li>
+        <li class="list-group-item">
+            <strong>Cédula del cliente:</strong> <span th:text="${cedula}"></span>
+        </li>
+    </ul>
+</div>
+
 
    <!-- Selección de barbero -->
    <div class="container mt-4">
