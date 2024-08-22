@@ -26,6 +26,15 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="btn-group" role="group">
+                <button id="btnCitasPendientes" class="btn btn-primary" onclick="showCitasPendientes()">Citas Pendientes</button>
+                <button id="btnTodasCitas" class="btn btn-secondary" onclick="showTodasCitas()">Todas las Citas</button>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
@@ -40,8 +49,8 @@
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr th:each="cita : ${misCitas}">
+                    <tbody id="tablaCitasPendientes">
+                        <tr th:each="cita : ${misCitasPendientes}">
                             <td th:text="${#dates.format(cita.fecha, 'EEEE, d MMMM yyyy')}"></td>
                             <td th:text="${cita.horainicio}"></td>
                             <td th:text="${cita.horafin}"></td>
@@ -50,8 +59,21 @@
                             <td>
                                 <div class="btn-group" role="group">
                                     <a href="#" th:href="@{/modificarCita/{idcita}(idcita=${cita.idcita})}" class="btn btn-primary btn-sm">Modificar</a>
-                                    <a href="#" th:href="@{/eliminarCita/{idcita}(idcita=${cita.idcita})}" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="#" th:href="@{/eliminarCita(idcita=${cita.idcita})}" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Seguro que desea eliminar?')">Eliminar</a>
                                 </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody id="tablaTodasCitas" style="display: none;">
+                        <tr th:each="cita : ${misCitas}">
+                            <td th:text="${#dates.format(cita.fecha, 'EEEE, d MMMM yyyy')}"></td>
+                            <td th:text="${cita.horainicio}"></td>
+                            <td th:text="${cita.horafin}"></td>
+                            <td th:text="${cita.servicio.titulo}"></td>
+                            <td th:text="${cita.barbero.nombre}"></td>
+                            <td>
+                                
                             </td>
                         </tr>
                     </tbody>
@@ -62,6 +84,25 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    function showCitasPendientes() {
+        document.getElementById('tablaCitasPendientes').style.display = '';
+        document.getElementById('tablaTodasCitas').style.display = 'none';
+        document.getElementById('btnCitasPendientes').classList.add('btn-primary');
+        document.getElementById('btnCitasPendientes').classList.remove('btn-secondary');
+        document.getElementById('btnTodasCitas').classList.add('btn-secondary');
+        document.getElementById('btnTodasCitas').classList.remove('btn-primary');
+    }
+
+    function showTodasCitas() {
+        document.getElementById('tablaCitasPendientes').style.display = 'none';
+        document.getElementById('tablaTodasCitas').style.display = '';
+        document.getElementById('btnCitasPendientes').classList.add('btn-secondary');
+        document.getElementById('btnCitasPendientes').classList.remove('btn-primary');
+        document.getElementById('btnTodasCitas').classList.add('btn-primary');
+        document.getElementById('btnTodasCitas').classList.remove('btn-secondary');
+    }
+</script>
 </body>
 </html>
 

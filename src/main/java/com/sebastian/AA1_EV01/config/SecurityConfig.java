@@ -24,6 +24,7 @@ public class SecurityConfig {
 				.requestMatchers("/seleccionHora").authenticated()
 				.requestMatchers("/detalleServicio").authenticated()
 				.requestMatchers("/misCitas").authenticated()
+				.requestMatchers("/miCuenta").authenticated()
 				.requestMatchers("/images/**").permitAll()
 				.requestMatchers("/logout").permitAll()
 				

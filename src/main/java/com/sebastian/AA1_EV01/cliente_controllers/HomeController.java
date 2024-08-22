@@ -103,10 +103,11 @@ public class HomeController {
 	    // Obtener las citas del cliente usando la cédula del usuario autenticado
 	    List<Citas> misCitas = citarep.findByCedulaCliente(cedula);
 	  
-	
+	    List<Citas> misCitasPendientes = citarep.findByCedulaClientePendientes(cedula);
 	    
 	    // Agregar las citas al modelo
 	    model.addAttribute("misCitas", misCitas);
+	    model.addAttribute("misCitasPendientes", misCitasPendientes);
 	    Cliente cliente = repo.findByCedula(cedula);
 	    model.addAttribute("cliente", cliente);
 	   
@@ -250,6 +251,52 @@ public class HomeController {
 	        return "clientes/confirmarCita"; 
 	    }
 	    
+	   
+	   
+		@GetMapping("/eliminarCita")
+		public String deleteCita( @RequestParam int idcita) { 
+			
+			try {
+				
+				Citas cita = citarep.findById(idcita).get();
+			
+				
+				citarep.delete(cita);
+			}catch(Exception ex){
+				
+				System.out.println("Exception: "+ex.getMessage());
+				
+				
+			}
+			
+			
+			return "redirect:/misCitas";}
+		
+		
+		@GetMapping("/miCuenta")
+		public String miCuenta(Model model) {
+		    // Obtener la cédula del usuario autenticado
+		    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		    String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+		    int cedula = Integer.parseInt(username);
+
+		    // Obtener las citas del cliente usando la cédula del usuario autenticado
+		 
+		  
+		 
+		    
+		    // Agregar las citas al modelo
+	
+		    Cliente cliente = repo.findByCedula(cedula);
+		    model.addAttribute("cliente", cliente);
+		   
+
+		    // Retornar la vista
+		    return "clientes/miCuenta"; 
+		}
+		
+		
+		
 	   
 	
 }
