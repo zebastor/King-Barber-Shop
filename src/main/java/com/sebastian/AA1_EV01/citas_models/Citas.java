@@ -94,10 +94,10 @@ public class Citas {
 	public void setCliente_cedula(int cliente_cedula) {
 		this.cliente_cedula = cliente_cedula;
 	}
-	public int getIdMetodopago() {
+	public int getIdmetodopago() {
 		return idmetodopago;
 	}
-	public void setIdMetodopago(int idmetodopago) {
+	public void setIdmetodopago(int idmetodopago) {
 		this.idmetodopago = idmetodopago;
 	}
 	public int getBarbero_cedula() {

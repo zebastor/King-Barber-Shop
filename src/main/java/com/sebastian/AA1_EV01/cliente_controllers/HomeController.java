@@ -216,7 +216,7 @@ public class HomeController {
 	       nuevaCita.setHorainicio(horaInicio);
 	       nuevaCita.setHorafin(horaFin);
 	       nuevaCita.setCliente_cedula(cedulaCliente);
-	       nuevaCita.setIdMetodopago(idMetodoPago);
+	       nuevaCita.setIdmetodopago(idMetodoPago);
 	       nuevaCita.setBarbero_cedula(cedulaBarbero);
 	       nuevaCita.setIdservicio(idServicio);
 	       nuevaCita.setIdcategoria(idCategoria);
@@ -242,18 +242,13 @@ public class HomeController {
 
 
 	   @GetMapping("/confirmarCita")
-	    public String showConfirm(Model model) {
-		   
-		   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	       int cedula = Integer.parseInt(((UserDetails) authentication.getPrincipal()).getUsername());
-	       Cliente cliente = repo.findByCedula(cedula);
-	       model.addAttribute("cedula", cliente.getCedula());
+	    public String showConfirm() {
 	        return "clientes/confirmarCita"; 
 	    }
 	    
 	   
 	   
-		@GetMapping("/eliminarCita")
+		@PostMapping("/eliminarCita")
 		public String deleteCita( @RequestParam int idcita) { 
 			
 			try {
@@ -296,7 +291,80 @@ public class HomeController {
 		}
 		
 		
+		@PostMapping("/modificarCita")
+		public String modificarDetalleServicio(@RequestParam("idcita") int idcita, Model model) {
+		    // Buscar la cita por su ID
+		    Citas cita = citarep.findById(idcita).orElseThrow(() -> new IllegalArgumentException("Invalid cita ID:" + idcita));
+		    
+		    // Agregar la cita al modelo
+		    model.addAttribute("cita", cita);
+
+		    return "clientes/modificarCita";
+		}
 		
-	   
+		
+		
+		@PostMapping("/modificarBarberoCita")
+		public String modificarBarberoCita(@RequestParam("idcita") int idcita,
+		                                   @RequestParam("fecha") String fechaString,
+		                                   @RequestParam("hora") LocalTime horainicio,
+		                                   @RequestParam("idservicio") int idservicio,
+		                                   Model model) throws ParseException {
+		    // Buscar la cita por ID
+		    Citas cita = citarep.findById(idcita).orElseThrow(() -> new IllegalArgumentException("Invalid cita ID: " + idcita));
+
+		    // Obtener el servicio y calcular la hora final
+		    Servicios servicio = serv.findById(idservicio);
+		    LocalTime horafinal = horainicio.plusMinutes(servicio.getDuracion());
+
+		    // Agregar datos al modelo
+		    model.addAttribute("servicio", servicio);
+		    model.addAttribute("horaSeleccionadaFin", horafinal);
+		    model.addAttribute("cita", cita);
+		    model.addAttribute("fecha", fechaString);
+		    model.addAttribute("hora", horainicio);
+
+		    // Parsear la fecha
+		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date fecha = dateFormat.parse(fechaString);
+
+		    // Obtener la lista de barberos disponibles
+		    List<Barberos> barberosDisponibles = barberrepo.findBarberosDisponibles(fecha, horainicio, horafinal);
+		    model.addAttribute("barberos", barberosDisponibles);
+
+		    return "clientes/modificarBarberoCita";
+		}
+
+		
+		@PostMapping("/confirmarCambios")
+		public String confirmarCambios(@RequestParam("idcita") int idcita,
+		                               @RequestParam("fecha") String fechaString,
+		                               @RequestParam("hora") LocalTime horainicio,
+		                               @RequestParam("horaSeleccionadaFin") LocalTime horafinal,
+		                               @RequestParam("cedula") int cedula,
+		                               @RequestParam("idservicio") int idservicio,
+		                               @RequestParam("categoriaId") int categoriaId,
+		                               @RequestParam("metodoPagoSeleccionado") int metodoPagoSeleccionado,
+		                               @RequestParam("barberoSeleccionado") int barberoCedula)throws ParseException  {
+			   SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			    Date fecha = dateFormat.parse(fechaString);
+		    // Lógica para actualizar la cita en la base de datos
+		    Citas cita = citarep.findById(idcita).orElseThrow(() -> new IllegalArgumentException("Invalid cita ID: " + idcita));
+		    cita.setIdcita(idcita);
+		    cita.setFecha(fecha);
+		    cita.setHorainicio(horainicio);
+		    cita.setHorafin(horafinal);
+		    cita.setCliente_cedula(cedula);
+		    cita.setIdservicio(idservicio);
+		    cita.setIdmetodopago(metodoPagoSeleccionado);
+		    cita.setBarbero_cedula(barberoCedula);
+
+		    // Guardar cambios en la base de datos
+		    citarep.save(cita);
+
+		    return "clientes/confirmarCambios";
+		}
+
+	
 	
 }

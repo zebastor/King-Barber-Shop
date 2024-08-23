@@ -23,6 +23,10 @@ public class SecurityConfig {
 				.requestMatchers("/confirmarCita").authenticated()
 				.requestMatchers("/seleccionHora").authenticated()
 				.requestMatchers("/detalleServicio").authenticated()
+				.requestMatchers("/modificarCita").authenticated()
+				.requestMatchers("/modificarBarberoCita").authenticated()
+			
+				.requestMatchers("/monfirmarCambios").authenticated()
 				.requestMatchers("/misCitas").authenticated()
 				.requestMatchers("/miCuenta").authenticated()
 				.requestMatchers("/images/**").permitAll()
