@@ -14,44 +14,35 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
+
 		return http
-		.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/").permitAll()
-				.requestMatchers("/register").permitAll()
-				.requestMatchers("/login").permitAll()
-				.requestMatchers("/confirmarCita").authenticated()
-				.requestMatchers("/seleccionHora").authenticated()
-				.requestMatchers("/detalleServicio").authenticated()
-				.requestMatchers("/modificarCita").authenticated()
-				.requestMatchers("/modificarBarberoCita").authenticated()
-			
-				.requestMatchers("/monfirmarCambios").authenticated()
-				.requestMatchers("/misCitas").authenticated()
-				.requestMatchers("/miCuenta").authenticated()
-				.requestMatchers("/images/**").permitAll()
-				.requestMatchers("/logout").permitAll()
-				
-				.anyRequest().authenticated()
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/clientes/**").permitAll()
+						.requestMatchers("/barberos/**").hasRole("BARBERO")
+						.requestMatchers("/").permitAll()
+						.requestMatchers("/register").permitAll()
+						.requestMatchers("/images/**").permitAll()
+						.requestMatchers("/logout").permitAll()
+						.requestMatchers("/barberos/index").permitAll()
+						.anyRequest().authenticated()
 				)
-		
-		.formLogin(form -> form
-                .loginPage("/login") 
-                .defaultSuccessUrl("/", true) 
-                .failureUrl("/login?error=true") 
-                .permitAll()
-            )
-		
-		.formLogin(form -> form
-				.defaultSuccessUrl("/", true))
-		.logout(config -> config.logoutSuccessUrl("/"))
-		.build();
-		
+
+				.formLogin(form -> form
+						.loginPage("/login")
+						.defaultSuccessUrl("/", true)
+						.failureUrl("/login?error=true")
+						.permitAll()
+				)
+
+				.formLogin(form -> form
+						.defaultSuccessUrl("/", true))
+				.logout(config -> config.logoutSuccessUrl("/"))
+				.build();
+
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }
-

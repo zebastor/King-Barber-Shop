@@ -3,6 +3,7 @@ package com.sebastian.AA1_EV01.citas_models;
 import java.time.LocalTime;
 import java.util.Date;
 
+import com.sebastian.AA1_EV01.cliente_models.Cliente;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,36 +29,62 @@ public class Citas {
 	private int barbero_cedula;
 	private int idservicio;
 	private int idcategoria;
-	
-	
+
+
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idservicio", insertable = false, updatable = false)
-	 private Servicios servicio;
+	@JoinColumn(name = "idmetodopago", insertable = false, updatable = false)
+	private MetodosPago metododepago;
 
-    // Getters y Setters
+	// Getters y Setters
 
-    public Servicios getServicio() {
-        return servicio;
-    }
+	public MetodosPago getMetododepago() {
+		return metododepago;
+	}
 
-    public void setServicio(Servicios servicio) {
-        this.servicio = servicio;
-    }
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "barbero_cedula", insertable = false, updatable = false)
-	 private Barberos barbero;
+	public void setMetododepago(MetodosPago metododepago) {
+		this.metododepago = metododepago;
+	}
 
-    // Getters y Setters
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cliente_cedula", insertable = false, updatable = false)
+	private Cliente cliente;
 
-    public Barberos getBarbero() {
-        return barbero;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idservicio", insertable = false, updatable = false)
+	private Servicios servicio;
 
-    public void setBarbero(Barberos barbero) {
-        this.barbero = barbero;
-    }
-	
+	// Getters y Setters
+
+	public Servicios getServicio() {
+		return servicio;
+	}
+
+	public void setServicio(Servicios servicio) {
+		this.servicio = servicio;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "barbero_cedula", insertable = false, updatable = false)
+	private Barberos barbero;
+
+	// Getters y Setters
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Barberos getBarbero() {
+		return barbero;
+	}
+
+	public void setBarbero(Barberos barbero) {
+		this.barbero = barbero;
+	}
+
 	public int getIdcita() {
 		return idcita;
 	}

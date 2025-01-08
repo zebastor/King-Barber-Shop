@@ -12,19 +12,29 @@ import com.sebastian.AA1_EV01.citas_models.Citas;
 
 
 public interface CitaRepository extends JpaRepository<Citas,Integer>{
-	
-	
-	
-	 List<Citas> findByFecha(Date fecha);
-	 
-	 
-	 @Query("SELECT c FROM Citas c WHERE c.cliente_cedula = :cliente_cedula ORDER BY c.fecha DESC")
-	 List<Citas> findByCedulaCliente(int cliente_cedula);
-	 
-	 
-	 @Query("SELECT c FROM Citas c WHERE c.cliente_cedula = :cliente_cedula AND (c.fecha > CURRENT_DATE OR (c.fecha = CURRENT_DATE AND c.horafin > CURRENT_TIME)) ORDER BY c.fecha DESC")
-	 List<Citas> findByCedulaClientePendientes(int cliente_cedula);
 
-	 
 
+
+	List<Citas> findByFecha(Date fecha);
+
+
+	@Query("SELECT c FROM Citas c WHERE c.cliente_cedula = :cliente_cedula ORDER BY c.fecha DESC")
+	List<Citas> findByCedulaCliente(int cliente_cedula);
+
+
+	@Query("SELECT c FROM Citas c WHERE c.cliente_cedula = :cliente_cedula AND (c.fecha > CURRENT_DATE OR (c.fecha = CURRENT_DATE AND c.horafin > CURRENT_TIME)) ORDER BY c.fecha DESC")
+	List<Citas> findByCedulaClientePendientes(int cliente_cedula);
+
+
+	@Query("SELECT c FROM Citas c " +
+			"JOIN FETCH c.servicio s " +
+			"JOIN FETCH c.cliente cl " +
+			"WHERE c.barbero_cedula = :barbero_cedula " +
+			"AND (c.fecha > CURRENT_DATE OR (c.fecha = CURRENT_DATE AND c.horafin > CURRENT_TIME)) " +
+			"ORDER BY c.fecha DESC")
+	List<Citas> findByCedulaBarbero( int barbero_cedula);
+
+
+	@Query("SELECT c FROM Citas c WHERE c.barbero_cedula = :cedula AND c.fecha = :fecha ORDER BY c.horainicio ASC")
+	List<Citas> findByCedulaBarberoAndFecha(int cedula,Date fecha);
 }

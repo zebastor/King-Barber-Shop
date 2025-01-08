@@ -34,10 +34,10 @@ public class Registro {
                            @Valid @ModelAttribute("registerDto") RegistroDto registerDto,
                            BindingResult result) {
         // Se inicializa en false
-    	if (result.hasErrors()) {
+        if (result.hasErrors()) {
             return "/clientes/register";
         }
-    	
+
         if (!registerDto.getClave().equals(registerDto.getConfirmClave())) {
             result.addError(new FieldError("registerDto", "confirmClave", "Las contraseñas no coinciden"));
         }
@@ -48,8 +48,8 @@ public class Registro {
         }
 
         if (result.hasErrors()) {
-        	model.addAttribute("success", false);
-            return "/clientes/register"; 
+            model.addAttribute("success", false);
+            return "/clientes/register";
         }
 
         try {

@@ -51,7 +51,7 @@
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Edad</label>
                     <div class="col-sm-8">
-                        <input class="form-control" th:field="*{edad}">
+                        <input class="form-control" th:field="*{edad}" type="number"  min="0" step="1" value="111">
                         <p th:if="${#fields.hasErrors('edad')}" class="text-danger" th:errors="*{edad}"></p>
                     </div>
                 </div>
@@ -67,12 +67,12 @@
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Teléfono</label>
                     <div class="col-sm-8">
-                        <input class="form-control" th:field="*{telefono}">
+                        <input class="form-control" th:field="*{telefono}" type="number"  min="0" step="1" value="111">
                         <p th:if="${#fields.hasErrors('telefono')}" class="text-danger" th:errors="*{telefono}"></p>
                     </div>
                 </div>
-                
-                
+
+
 
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">Clave</label>
@@ -82,13 +82,13 @@
                     </div>
                 </div>
 
-              <div class="row mb-3">
-    <label class="col-sm-4 col-form-label">Confirmar clave</label>
-    <div class="col-sm-8">
-        <input class="form-control" type="password" th:field="*{confirmClave}">
-        <p th:if="${#fields.hasErrors('confirmClave')}" class="text-danger" th:errors="*{confirmClave}"></p>
-    </div>
-</div>
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Confirmar clave</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="password" th:field="*{confirmClave}">
+                        <p th:if="${#fields.hasErrors('confirmClave')}" class="text-danger" th:errors="*{confirmClave}"></p>
+                    </div>
+                </div>
 
                 <div class="row mb-3">
                     <div class="offset-sm-4 col-sm-4 d-grid">

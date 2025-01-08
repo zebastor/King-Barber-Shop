@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.sebastian.AA1_EV01.Aa1Ev01ApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.58 s -- in com.sebastian.AA1_EV01.Aa1Ev01ApplicationTests

@@ -11,6 +11,14 @@ public class Barberos {
 	private int cedula;
 	private String nombre;
 	private String apellido;
+	private String clave;
+	public String getClave() {
+		return clave;
+	}
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
 	public int getCedula() {
 		return cedula;
 	}
