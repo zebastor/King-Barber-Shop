@@ -1,4 +1,4 @@
-FROM amazoncorretto:22-alpine-jdk
+FROM amazoncorretto:23-alpine-jdk
 
 COPY target/AA1-EV01-0.0.1-SNAPSHOT.jar app.jar
 
