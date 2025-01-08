@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto rounded border p-4">
+            <h2 class="text-center mb-4">Registro</h2>
+            <hr/>
+
+            <!-- Mensaje de éxito -->
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Cuenta creada</strong>
+                <a class="ms-2" href="/login">Iniciar sesión</a>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <form method="post" th:object="${registerDto}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Cédula</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{cedula}" type="number"  min="0" step="1" value="111">
+                        <p th:if="${#fields.hasErrors('cedula')}" class="text-danger" th:errors="*{cedula}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Nombres</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{nombre}">
+                        <p th:if="${#fields.hasErrors('nombre')}" class="text-danger" th:errors="*{nombre}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Apellidos</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{apellido}">
+                        <p th:if="${#fields.hasErrors('apellido')}" class="text-danger" th:errors="*{apellido}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Edad</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{edad}">
+                        <p th:if="${#fields.hasErrors('edad')}" class="text-danger" th:errors="*{edad}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Correo</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{correo}">
+                        <p th:if="${#fields.hasErrors('correo')}" class="text-danger" th:errors="*{correo}"></p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Teléfono</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" th:field="*{telefono}">
+                        <p th:if="${#fields.hasErrors('telefono')}" class="text-danger" th:errors="*{telefono}"></p>
+                    </div>
+                </div>
+                
+                
+
+                <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Clave</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="password" th:field="*{clave}">
+                        <p th:if="${#fields.hasErrors('clave')}" class="text-danger" th:errors="*{clave}"></p>
+                    </div>
+                </div>
+
+              <div class="row mb-3">
+    <label class="col-sm-4 col-form-label">Confirmar clave</label>
+    <div class="col-sm-8">
+        <input class="form-control" type="password" th:field="*{confirmClave}">
+        <p th:if="${#fields.hasErrors('confirmClave')}" class="text-danger" th:errors="*{confirmClave}"></p>
+    </div>
+</div>
+
+                <div class="row mb-3">
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a href="/" class="btn btn-outline-primary">Cancel</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Servicios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+    <div class="container d-flex justify-content-between">
+        <!-- Texto a la izquierda -->
+        <a class="navbar-brand text-nowrap" href="/">King Barber Shop</a>
+
+        <!-- Espacio en el medio -->
+        <div class="flex-grow-1"></div>
+
+        <!-- Opciones a la derecha -->
+        <div class="text-end" sec:authorize="isAuthenticated()">
+            <ul class="navbar-nav d-flex align-items-center">
+                <li>
+                    <div class="dropdown text-end">
+                        <a class="btn btn-outline-primary dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span>opciones</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/miCuenta">Perfil</a></li>
+                            <li><a class="dropdown-item" href="/misCitas">Tus citas</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="/logout">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5 p-4 border rounded shadow-sm bg-light">
+    <div class="text-center">
+        <h1 class="display-4 text-secondary mb-4" th:text="${cita.servicio.titulo}"></h1>
+    </div>
+    <p class="lead" th:text="${cita.servicio.descripcion}"></p>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <p class="mb-0"><strong>Duración:</strong> <span th:text="${cita.servicio.duracion}"></span> minutos</p>
+        <p class="mb-0"><strong>Precio:</strong> $<span th:text="${cita.servicio.precio}"></span></p>
+             <p class="mb-0"><strong>Categoria:</strong> <span th:text="${cita.servicio.categoriaservicio.nombrecategoria}"></span></p>
+                   <p class="mb-0"><strong>Fecha Actual:</strong> <span th:text="${#dates.format(cita.fecha, 'EEEE, d MMMM yyyy')}"></span></p>
+                   <p class="mb-0"><strong>Hora inicio:</strong> <span th:text="${cita.horainicio}"></span></p>
+                       <p class="mb-0"><strong>Hora finalizacion:</strong> <span th:text="${cita.horafin}"></span></p>
+                       
+                       
+    </div>
+</div>
+
+   
+
+
+
+    <div class="container mt-4">
+        <h2>Filtrar por Fecha</h2>
+        <select id="fechaFiltro" class="form-select"></select>
+    </div>
+
+    <div class="container mt-4">
+        <h2>Seleccionar Hora</h2>
+        <select id="horaFiltro" class="form-select"></select>
+        <button class="btn btn-primary mt-3" onclick="redirigir()">Seleccionar Hora</button>
+    </div>
+
+    <script th:inline="javascript">
+        function generarMenuFechas() {
+            const fechaFiltro = document.getElementById('fechaFiltro');
+            const hoy = new Date();
+            const diasParaMostrar = 30;
+
+            for (let i = 0; i < diasParaMostrar; i++) {
+                const fecha = new Date(hoy);
+                fecha.setDate(hoy.getDate() + i);
+
+                const dia = fecha.getDate().toString().padStart(2, '0');
+                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+                const año = fecha.getFullYear();
+
+                const fechaFormateada = `${año}-${mes}-${dia}`;
+                const fechaVisible = `${dia}/${mes}/${año}`;
+
+                const opcion = document.createElement('option');
+                opcion.value = fechaFormateada;
+                opcion.textContent = fechaVisible;
+
+                fechaFiltro.appendChild(opcion);
+            }
+        }
+
+        function generarMenuHoras() {
+            const horaFiltro = document.getElementById('horaFiltro');
+            horaFiltro.innerHTML = ''; 
+
+            const fechaSeleccionada = document.getElementById('fechaFiltro').value;
+            const hoy = new Date();
+            const fechaActual = `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}-${hoy.getDate().toString().padStart(2, '0')}`;
+            const ahora = new Date();
+            const horaActual = ahora.getHours();
+            const minutoActual = ahora.getMinutes();
+            const inicioHora = 8;
+            const finHora = 21;
+
+            for (let h = inicioHora; h <= finHora; h++) {
+                for (let m = 0; m < 60; m += 30) {
+                    if (fechaSeleccionada === fechaActual) {
+                        // Si es hoy, mostrar solo las horas futuras
+                        if (h > horaActual || (h === horaActual && m > minutoActual)) {
+                            const hora = h.toString().padStart(2, '0');
+                            const minuto = m.toString().padStart(2, '0');
+                            const opcion = document.createElement('option');
+                            opcion.value = `${hora}:${minuto}`;
+                            opcion.textContent = `${hora}:${minuto}`;
+                            horaFiltro.appendChild(opcion);
+                        }
+                    } else {
+                        // Si es una fecha futura, mostrar todas las horas desde el inicio
+                        const hora = h.toString().padStart(2, '0');
+                        const minuto = m.toString().padStart(2, '0');
+                        const opcion = document.createElement('option');
+                        opcion.value = `${hora}:${minuto}`;
+                        opcion.textContent = `${hora}:${minuto}`;
+                        horaFiltro.appendChild(opcion);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('fechaFiltro').addEventListener('change', generarMenuHoras);
+
+
+        function redirigir() {
+            const fechaSeleccionada = document.getElementById('fechaFiltro').value;
+            const horaSeleccionada = document.getElementById('horaFiltro').value;
+            const idCita = /*[[${cita.idcita}]]*/;
+            const idServicio = /*[[${cita.idservicio}]]*/;
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/modificarBarberoCita';
+
+            const csrfToken = /*[[${_csrf.token}]]*/;
+            const csrfParameter = /*[[${_csrf.parameterName}]]*/;
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = csrfParameter;
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+
+            // Agregar otros inputs
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'idcita';
+            inputId.value = idCita;
+            form.appendChild(inputId);
+            
+            const inputIdServicio = document.createElement('input');
+            inputIdServicio.type = 'hidden';
+            inputIdServicio.name = 'idservicio';
+            inputIdServicio.value = idServicio;
+            form.appendChild(inputIdServicio);
+
+            const inputFecha = document.createElement('input');
+            inputFecha.type = 'hidden';
+            inputFecha.name = 'fecha';
+            inputFecha.value = fechaSeleccionada;
+            form.appendChild(inputFecha);
+
+            const inputHora = document.createElement('input');
+            inputHora.type = 'hidden';
+            inputHora.name = 'hora';
+            inputHora.value = horaSeleccionada;
+            form.appendChild(inputHora);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generarMenuFechas();
+            generarMenuHoras();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
