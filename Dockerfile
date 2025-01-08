@@ -5,7 +5,7 @@ FROM eclipse-temurin:23-jdk-alpine AS build
 COPY . .
 
 #ENTRYPOINT ["java", "-jar", "app.jar"]
-RUN mvn clean package -DskiTests
+RUN mvn clean package -DskipTests
 FROM openjdk:23-jdk-slim
 COPY --from=build /target/AA1-EV01-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
