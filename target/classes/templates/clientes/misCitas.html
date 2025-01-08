@@ -97,17 +97,18 @@
                             <td th:text="${cita.barbero.nombre}"></td>
                            
                          <td>
-    <div class="btn-group" role="group">
-        <form th:action="@{/modificarCita}" method="post" style="display:inline;">
-            <input type="hidden" name="idcita" th:value="${cita.idcita}"/>
-            <button type="submit" class="btn btn-primary btn-sm">Modificar</button>
-        </form>
-        <form th:action="@{/eliminarCita}" method="post" style="display:inline;" onsubmit="return confirm('Seguro que desea eliminar?')">
-            <input type="hidden" name="idcita" th:value="${cita.idcita}"/>
-            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-        </form>
-    </div>
-</td>
+                             <div class="btn-group" role="group" sec:authorize="isAuthenticated()">
+                                 <form th:action="@{/modificarCita}" method="post" style="display:inline;">
+                                     <input type="hidden" name="idcita" th:value="${cita.idcita}" />
+                                     <button type="submit" class="btn btn-primary btn-sm">Modificar</button>
+                                 </form>
+                                 <form th:action="@{/eliminarCita}" method="post" style="display:inline;" onsubmit="return confirm('Seguro que desea eliminar?')">
+                                     <input type="hidden" name="idcita" th:value="${cita.idcita}" />
+                                     <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                 </form>
+                             </div>
+
+                         </td>
                         </tr>
                     </tbody>
                     <tbody id="tablaTodasCitas" style="display: none;">
