@@ -4,7 +4,7 @@ FROM eclipse-temurin:23-jdk-alpine AS build
 COPY . .
 
 # Ejecutar la construcción de la aplicación (con Maven)
-RUN mvn clean package -DskipTests
+#RUN mvn clean package -DskipTests
 
 # Crear el contenedor final
 FROM openjdk:23-jdk-slim
