@@ -90,7 +90,7 @@ public class HomeController {
 			if (cliente != null) {
 				model.addAttribute("cedula", cliente.getCedula());
 				model.addAttribute("nombre", cliente.getNombre());
-				return "/clientes/index"; // Página de clientes
+				return "clientes/index"; // Página de clientes
 			}
 
 			// Verificar si el usuario es un Barbero
@@ -103,7 +103,7 @@ public class HomeController {
 				List<Citas> misCitasPendientes = citarep.findByCedulaBarbero(cedula);
 				model.addAttribute("misCitasPendientes", misCitasPendientes);
 
-				return "/clientes/indexBarbero"; // Página de barberos
+				return "clientes/indexBarbero"; // Página de barberos
 			}
 
 			// Si no se encuentra ni Cliente ni Barbero
@@ -112,7 +112,7 @@ public class HomeController {
 		}
 
 		// Si no está autenticado, mostrar el índice por defecto (clientes/index)
-		return "/clientes/index";
+		return "clientes/index";
 	}
 
 
@@ -138,7 +138,7 @@ public class HomeController {
 				model.addAttribute("misCitasPendientes", citasDelBarbero);
 				model.addAttribute("fechaSeleccionada", fecha);
 
-				return "/clientes/indexBarbero"; // Página de barberos con las citas filtradas por fecha
+				return "clientes/indexBarbero"; // Página de barberos con las citas filtradas por fecha
 			}
 
 			// Si no se encuentra el Barbero
@@ -147,7 +147,7 @@ public class HomeController {
 		}
 
 		// Si no está autenticado, mostrar el índice por defecto (clientes/index)
-		return "/clientes/index";
+		return "clientes/index";
 	}
 
 
