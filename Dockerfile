@@ -14,6 +14,6 @@ COPY --from=build /target/AA1-EV01-0.0.1-SNAPSHOT.jar app.jar
 
 # Copiar los templates directamente al directorio de clases
 COPY --from=build /src/main/resources/templates /target/classes/templates
-
+#
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
