@@ -149,7 +149,9 @@
       <div class="card mb-4">
         <!-- Imagen -->
         <a th:href="@{/detalleServicio/{idservicio}(idservicio=${servicio.idservicio})}">
-          <img th:src="@{'images/' + ${servicio.imagen}}" class="card-img-top" alt="Imagen del servicio">
+          <img th:src="@{'/images/' + ${servicio.imagen}}" class="card-img-top" alt="Imagen del servicio">
+
+
         </a>
         <div class="card-body">
           <!-- Título alineado a la izquierda -->

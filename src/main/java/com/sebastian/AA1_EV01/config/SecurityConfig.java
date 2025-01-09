@@ -22,7 +22,7 @@ public class SecurityConfig {
 						.requestMatchers("/").permitAll()
 						.requestMatchers("/register").permitAll()
 						.requestMatchers("/images/**").permitAll()
-						.requestMatchers("/static/**").permitAll()
+						.requestMatchers("/templates/**").permitAll()
 						.requestMatchers("/logout").permitAll()
 						.requestMatchers("/barberos/index").permitAll()
 						.anyRequest().authenticated()
