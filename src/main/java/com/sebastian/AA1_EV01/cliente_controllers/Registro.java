@@ -26,7 +26,7 @@ public class Registro {
 
         model.addAttribute("registerDto", new RegistroDto());
         model.addAttribute("success", false);
-        return "/clientes/register";
+        return "clientes/register";
     }
 
     @PostMapping("/register")
@@ -35,7 +35,7 @@ public class Registro {
                            BindingResult result) {
         // Se inicializa en false
         if (result.hasErrors()) {
-            return "/clientes/register";
+            return "clientes/register";
         }
 
         if (!registerDto.getClave().equals(registerDto.getConfirmClave())) {
@@ -49,7 +49,7 @@ public class Registro {
 
         if (result.hasErrors()) {
             model.addAttribute("success", false);
-            return "/clientes/register";
+            return "clientes/register";
         }
 
         try {
@@ -70,6 +70,6 @@ public class Registro {
             result.addError(new FieldError("registerDto", "nombre", "Error inesperado: " + ex.getMessage()));
         }
 
-        return "/clientes/register"; // Mantenerse en la página de registro en todos los casos
+        return "clientes/register"; // Mantenerse en la página de registro en todos los casos
     }
 }
